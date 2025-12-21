@@ -13,7 +13,7 @@
 
 ## 在线预览
 
-- GitHub Pages: https://geeeeeeeek.github.io/web_tool/
+- GitHub Pages: https://blog.bigworldxld.dpdns.org/my_nav
 - Vercel: https://web-tool-omega.vercel.app/
 - Cloudflare Pages: https://web-a55.pages.dev/
 
