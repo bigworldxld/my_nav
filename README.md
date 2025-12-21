@@ -1,7 +1,5 @@
 # 在线网址导航 - Web Tool
 
-[English Doc](./Readme-en.md)
-
 基于 HTML + CSS + JavaScript 开发的在线网址导航工具，界面简洁美观，支持网址收录提交，适合个人或团队使用。
 
 ## 项目特点
@@ -25,8 +23,7 @@
 
 1. 克隆项目到本地
 ```bash
-git clone https://github.com/geeeeeeeek/web_tool.git
-cd web_tool
+git clone git@github.com:bigworldxld/my_nav.git
 ```
 
 2. 使用任意 HTTP 服务器运行
@@ -353,21 +350,3 @@ web_tool/
 - [Nginx 官方文档](https://nginx.org/en/docs/)
 - [Vercel 部署文档](https://vercel.com/docs)
 - [Let's Encrypt 证书](https://letsencrypt.org/)
-
-## 许可证
-
-MIT License
-
-## 贡献
-
-欢迎提交 Issue 和 Pull Request！
-
-## 联系方式
-
-- GitHub: https://github.com/geeeeeeeek
-- 个人主页: https://web.gitapp.cn
-- Email: kefu308@gmail.com
-
----
-
-⭐ 如果这个项目对你有帮助，欢迎 Star 支持！
