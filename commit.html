@@ -224,12 +224,13 @@
                     <option value="常用工具">常用工具</option>
                     <option value="科研办公">科研办公</option>
                     <option value="开发设计">开发设计</option>
-                    <option value="效率办公">效率办公</option>
-                    <option value="社交媒体">社交媒体</option>
+                    <!-- <option value="效率办公">效率办公</option> -->
+                    <!-- <option value="社交媒体">社交媒体</option> -->
+                    <option value="悠闲娱乐">悠闲娱乐</option>
                     <option value="资源下载">资源下载</option>
-                    <option value="生活服务">生活服务</option>
+                    <!-- <option value="生活服务">生活服务</option> -->
                     <option value="学习教育">学习教育</option>
-                    <option value="其他">其他</option>
+                    <!-- <option value="其他">其他</option> -->
                 </select>
                 <div class="error-message" id="categoryError">请选择网站分类</div>
             </div>
@@ -253,6 +254,17 @@
                 </label>
                 <input type="text" id="keywords" name="keywords" class="form-control"
                        placeholder="用逗号分隔，如：工具,在线,免费" maxlength="100">
+            </div>
+
+            <div class="form-group">
+                <label for="logoPath">
+                    网站 Logo 路径
+                </label>
+                <input type="text" id="logoPath" name="logoPath" class="form-control"
+                       placeholder="例如：assets/images/logos/example.jpg（选填，留空将自动生成）" maxlength="200">
+                <div class="char-count" style="font-size: 12px; color: #999; margin-top: 5px;">
+                    提示：如果不填写，系统将根据网站域名自动生成 Logo 路径
+                </div>
             </div>
 
             <div class="form-group">
@@ -363,11 +375,63 @@
                     category: $('#category').val(),
                     description: $('#description').val().trim(),
                     keywords: $('#keywords').val().trim(),
+                    logoPath: $('#logoPath').val().trim(), // 添加 logo 路径
                     email: $('#email').val().trim(),
                     contact: $('#contact').val().trim(),
                     submitTime: new Date().toISOString()
                 };
 
+                // 提交表单数据到 API
+                // 如果 Worker 使用独立域名，请修改为完整 URL，例如：
+                // url: 'https://nav-api.your-subdomain.workers.dev/api/submit',
+                $.ajax({
+                    url: 'https://bigworldxld.dpdns.org/api/submit',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    timeout: 30000, // 30秒超时
+                    success: function(response) {
+                        // 处理成功响应
+                        if (response.success || response.code === 200) {
+                            // 显示成功消息
+                            $('#successMessage').fadeIn();
+                            // 重置表单
+                            $('#submitForm')[0].reset();
+                            $('#descCount').text('0');
+                            // 滚动到顶部
+                            $('html, body').animate({ scrollTop: 0 }, 500);
+                            // 3秒后隐藏成功消息
+                            setTimeout(function() {
+                                $('#successMessage').fadeOut();
+                            }, 5000);
+                        } else {
+                            // 显示错误消息
+                            alert(response.message || '提交失败，请稍后重试');
+                            $submitBtn.prop('disabled', false).html('<i class="fas fa-paper-plane"></i> 提交网站');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // 处理错误响应
+                        let errorMessage = '提交失败，请稍后重试';
+                        
+                        if (xhr.status === 0) {
+                            errorMessage = '网络连接失败，请检查网络设置';
+                        } else if (xhr.status === 400) {
+                            errorMessage = '提交的数据格式不正确，请检查后重试';
+                        } else if (xhr.status === 429) {
+                            errorMessage = '提交过于频繁，请稍后再试';
+                        } else if (xhr.status === 500) {
+                            errorMessage = '服务器错误，请稍后重试';
+                        } else if (status === 'timeout') {
+                            errorMessage = '请求超时，请检查网络连接';
+                        } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+                        
+                        alert(errorMessage);
+                        $submitBtn.prop('disabled', false).html('<i class="fas fa-paper-plane"></i> 提交网站');
+                    }
+                });
             });
 
             // 输入时移除错误状态

@@ -94,50 +94,6 @@
                                         </ul>
                                     </li>
 
-
-
-                                    <li class="sidebar-item">
-                                        <a href="#a4d417d7850fde0cd00e4af576621a63" class="smooth change-href" data-change="#a4d417d7850fde0cd00e4af576621a63">
-                                            <i class="fas fa-film fa-lg icon-fw icon-lg mr-2"></i>
-                                            <span>悠闲娱乐</span>
-                                            <i class="iconfont icon-arrow-r-m sidebar-more text-sm"></i>
-                                        </a>
-                                        <ul>
-
-                                            <li><a href="#a4d417d7850fde0cd00e4af576621a63" class="smooth"><span>影音视频</span></a></li>
-
-                                            <li><a href="#e15122403d5aca361a6b63ddea292464" class="smooth"><span>游戏竞技</span></a></li>
-
-                                        </ul>
-                                    </li>
-
-
-
-                                    <li class="sidebar-item">
-                                        <a href="#5e6e1089ffbc5d7819c0d0f1f7b31ebc" class="smooth change-href" data-change="#5e6e1089ffbc5d7819c0d0f1f7b31ebc">
-                                            <i class="far fa-folder-open fa-lg icon-fw icon-lg mr-2"></i>
-                                            <span>素材资源</span>
-                                            <i class="iconfont icon-arrow-r-m sidebar-more text-sm"></i>
-                                        </a>
-                                        <ul>
-
-                                            <li><a href="#5e6e1089ffbc5d7819c0d0f1f7b31ebc" class="smooth"><span>网盘资源</span></a></li>
-
-                                            <li><a href="#7866a35b09d466b9cf0295af54d30d53" class="smooth"><span>图标素材</span></a></li>
-
-                                            <li><a href="#779477bcccdd4ecb1d852c8d4a67caca" class="smooth"><span>图标设计</span></a></li>
-
-                                            <li><a href="#ff65f7f9721757bf11b0b0c95f1b9446" class="smooth"><span>平面素材</span></a></li>
-
-                                            <li><a href="#722d3693fc0b9344bb46ee220beac1b6" class="smooth"><span>字体资源</span></a></li>
-
-                                            <li><a href="#113a0a745b4169af0f7646269c12ae66" class="smooth"><span>PPT资源</span></a></li>
-
-                                        </ul>
-                                    </li>
-
-
-
                                     <li class="sidebar-item">
                                         <a href="#4fbc8ba07df90bae306d8e3b83fc5a21" class="smooth change-href" data-change="#4fbc8ba07df90bae306d8e3b83fc5a21">
                                             <i class="fas fa-tools fa-lg icon-fw icon-lg mr-2"></i>
@@ -160,11 +116,56 @@
                                     </li>
 
 
+                                    <li class="sidebar-item">
+                                        <a href="#a4d417d7850fde0cd00e4af576621a63" class="smooth change-href" data-change="#a4d417d7850fde0cd00e4af576621a63">
+                                            <i class="fas fa-film fa-lg icon-fw icon-lg mr-2"></i>
+                                            <span>悠闲娱乐</span>
+                                            <i class="iconfont icon-arrow-r-m sidebar-more text-sm"></i>
+                                        </a>
+                                        <ul>
+
+                                            <li><a href="#a4d417d7850fde0cd00e4af576621a63" class="smooth"><span>影音视频</span></a></li>
+
+                                            <li><a href="#e15122403d5aca361a6b63ddea292464" class="smooth"><span>游戏竞技</span></a></li>
+
+                                        </ul>
+                                    </li>
+
+
+
+                                    <li class="sidebar-item">
+                                        <a href="#5e6e1089ffbc5d7819c0d0f1f7b31ebc" class="smooth change-href" data-change="#5e6e1089ffbc5d7819c0d0f1f7b31ebc">
+                                            <i class="far fa-folder-open fa-lg icon-fw icon-lg mr-2"></i>
+                                            <span>资源下载</span>
+                                            <i class="iconfont icon-arrow-r-m sidebar-more text-sm"></i>
+                                        </a>
+                                        <ul>
+
+                                            <li><a href="#5e6e1089ffbc5d7819c0d0f1f7b31ebc" class="smooth"><span>网盘资源</span></a></li>
+
+                                            <li><a href="#7866a35b09d466b9cf0295af54d30d53" class="smooth"><span>图标素材</span></a></li>
+
+                                            <li><a href="#779477bcccdd4ecb1d852c8d4a67caca" class="smooth"><span>图标设计</span></a></li>
+
+                                            <li><a href="#ff65f7f9721757bf11b0b0c95f1b9446" class="smooth"><span>平面素材</span></a></li>
+
+                                            <li><a href="#722d3693fc0b9344bb46ee220beac1b6" class="smooth"><span>字体资源</span></a></li>
+
+                                            <li><a href="#113a0a745b4169af0f7646269c12ae66" class="smooth"><span>PPT资源</span></a></li>
+
+                                        </ul>
+                                    </li>
+
+
+
+
+
+
 
                                     <li class="sidebar-item">
                                         <a href="#19cb9b648dba4efc58a205ea413b6b5d" class="smooth change-href" data-change="#19cb9b648dba4efc58a205ea413b6b5d">
                                             <i class="fas fa-pencil-alt fa-lg icon-fw icon-lg mr-2"></i>
-                                            <span>资讯学习</span>
+                                            <span>学习教育</span>
                                             <i class="iconfont icon-arrow-r-m sidebar-more text-sm"></i>
                                         </a>
                                         <ul>
@@ -6172,6 +6173,186 @@ function switchNightMode(){
         $(".mode-ico").addClass("icon-night");
     }
 }
+
+// 动态加载网站列表
+(function() {
+    // 分类名称到 HTML ID 的映射（根据实际页面中的分类 ID 填写）
+    const categoryIdMap = {
+        '常用工具': '3e90c5117dc0fe9d71410e448d766e52',
+        '科研办公': '89a839e0a347c0be73793d01e52c31ad',
+        '开发设计': 'a4d417d7850fde0cd00e4af576621a63',
+        // '效率办公': 'e0aade1cd567f730e498e248bbd6acdf',
+        // '社交媒体': 'e15122403d5aca361a6b63ddea292464',
+        '悠闲娱乐': 'e15122403d5aca361a6b63ddea292464',
+        '资源下载': '5e6e1089ffbc5d7819c0d0f1f7b31ebc',
+        // '生活服务': '7866a35b09d466b9cf0295af54d30d53',
+        '学习教育': '779477bcccdd4ecb1d852c8d4a67caca',
+        // '其他': 'ff65f7f9721757bf11b0b0c95f1b9446'
+    };
+
+    // API 地址（根据实际部署情况修改）
+    const API_BASE = 'https://bigworldxld.dpdns.org/api';
+
+    // 获取网站 Logo 路径
+    function getLogoPath(site) {
+        // 优先使用保存的 logoPath
+        if (site.logoPath && site.logoPath.trim()) {
+            return site.logoPath.trim();
+        }
+        
+        // 如果没有保存的 logoPath，尝试从 URL 提取域名作为 logo 文件名
+        try {
+            const domain = new URL(site.siteUrl).hostname.replace('www.', '');
+            const logoPath = `assets/images/logos/${encodeURIComponent(domain)}.jpg`;
+            return logoPath;
+        } catch {
+            return 'assets/images/logos/default.webp';
+        }
+    }
+
+    // 创建网站卡片 HTML（完全复用原有样式）
+    function createSiteCard(site) {
+        const logoPath = getLogoPath(site);
+        // 转义 HTML 特殊字符，防止 XSS
+        const escapeHtml = (text) => {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        };
+        
+        const siteName = escapeHtml(site.siteName);
+        const siteUrl = escapeHtml(site.siteUrl);
+        const description = escapeHtml(site.description);
+        
+        // 完全按照原有 HTML 结构创建，包括所有空格和格式
+        return `
+                <div class="url-card col-6  col-sm-6 col-md-4 col-xl-5a col-xxl-6a">
+                    <div class="url-body default">
+
+
+                        <a href="${siteUrl}" target="_blank" data-id="" data-url="${siteUrl}"
+                            class="card no-c mb-4" data-toggle="tooltip" data-placement="bottom" data-original-title="${description}">
+
+                            <div class="card-body">
+                                <div class="url-content d-flex align-items-center">
+                                    <div class="url-img mr-2 d-flex align-items-center justify-content-center">
+
+
+                                            <img class="lazy" src="${logoPath}" data-src="${logoPath}"
+                                                onerror="javascript:this.src='assets\/images\/logos\/default.webp'" alt="${siteName}">
+
+
+                                    </div>
+                                    <div class="url-info flex-fill">
+                                        <div class="text-sm overflowClip_1">
+                                            <strong>${siteName}</strong>
+                                        </div>
+                                        <p class="overflowClip_1 m-0 text-muted text-xs">${description}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="${siteUrl}" class="togo text-center text-muted is-views" data-id="689"
+                            data-toggle="tooltip" data-placement="right" title="直达" rel="nofollow">
+                            <i class="iconfont icon-goto"></i>
+                        </a>
+                    </div>
+                </div>
+        `;
+    }
+
+    // 将网站添加到对应分类
+    function addSitesToCategory(categoryName, sites) {
+        const categoryId = categoryIdMap[categoryName];
+        if (!categoryId) {
+            console.warn('未找到分类映射:', categoryName);
+            return;
+        }
+
+        // 查找分类标题元素
+        const categoryHeader = $(`#${categoryId}`).closest('.d-flex.flex-fill');
+        if (categoryHeader.length === 0) {
+            console.warn('未找到分类标题:', categoryName, categoryId);
+            return;
+        }
+
+        // 查找分类下的 .row 容器（如果不存在则创建）
+        let rowContainer = categoryHeader.next('.row');
+        if (rowContainer.length === 0) {
+            // 如果下一个元素不是 .row，则在标题后插入
+            rowContainer = $('<div class="row"></div>');
+            categoryHeader.after(rowContainer);
+        }
+
+        // 添加网站卡片（使用 jQuery 的 append 方法，保持原有样式）
+        sites.forEach(site => {
+            const cardHtml = createSiteCard(site);
+            // 使用 jQuery 解析 HTML 并追加，确保样式完全一致
+            const $card = $(cardHtml);
+            rowContainer.append($card);
+        });
+
+        // 重新初始化 tooltip（如果使用了 Bootstrap tooltip）
+        if (typeof $ !== 'undefined' && $.fn.tooltip) {
+            // 只对新添加的元素初始化 tooltip
+            rowContainer.find('[data-toggle="tooltip"]').tooltip();
+        }
+        
+        // 重新初始化懒加载图片（对新添加的图片）
+        if (typeof lozad !== 'undefined') {
+            const observer = lozad('.lazy', {
+                loaded: function(el) {
+                    el.classList.add('fade-in');
+                }
+            });
+            observer.observe();
+        } else if (typeof LazyLoad !== 'undefined') {
+            const lazyLoadInstance = new LazyLoad({
+                elements_selector: '.lazy'
+            });
+        }
+    }
+
+    // 加载网站列表
+    async function loadSites() {
+        try {
+            const response = await fetch(`${API_BASE}/sites`);
+            const data = await response.json();
+
+            if (data.success && data.sitesByCategory) {
+                // 遍历每个分类，添加网站
+                Object.keys(data.sitesByCategory).forEach(categoryName => {
+                    const sites = data.sitesByCategory[categoryName];
+                    if (sites && sites.length > 0) {
+                        addSitesToCategory(categoryName, sites);
+                    }
+                });
+
+                // 重新初始化懒加载（如果使用了 lazyload）
+                if (typeof LazyLoad !== 'undefined') {
+                    const lazyLoadInstance = new LazyLoad();
+                } else if (typeof lozad !== 'undefined') {
+                    const observer = lozad();
+                    observer.observe();
+                }
+
+                console.log('网站列表加载完成');
+            } else {
+                console.warn('获取网站列表失败:', data.message);
+            }
+        } catch (error) {
+            console.error('加载网站列表时出错:', error);
+        }
+    }
+
+    // 页面加载完成后加载网站列表
+    $(document).ready(function() {
+        // 延迟加载，确保页面结构已渲染
+        setTimeout(function() {
+            loadSites();
+        }, 1000);
+    });
+})();
 </script>
 </body>
 </html>

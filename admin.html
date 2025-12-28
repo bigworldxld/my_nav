@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>管理后台 - 网址导航</title>
+    <link rel="stylesheet" href="./assets/css/bootstrap.min-4.3.1.css" />
+    <link rel="stylesheet" href="./assets/fontawesome-5.15.4/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .content-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .content-panel.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #45a049;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- 登录页面 -->
+    <div id="loginPage" class="login-container">
+        <h2 style="text-align: center; margin-bottom: 20px;">管理员登录</h2>
+        <div id="loginMessage" class="message"></div>
+        <form id="loginForm">
+            <div class="form-group">
+                <label>用户名</label>
+                <input type="text" id="username" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>密码</label>
+                <input type="password" id="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">登录</button>
+        </form>
+    </div>
+
+    <!-- 管理后台 -->
+    <div id="adminPage" class="admin-container" style="display: none;">
+        <div class="header">
+            <h2>管理后台</h2>
+            <button class="logout-btn" onclick="logout()">退出登录</button>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('submissions')">待审核提交</button>
+            <button class="tab-btn" onclick="switchTab('addSite')">添加网站</button>
+            <button class="tab-btn" onclick="switchTab('sites')">网站列表</button>
+        </div>
+
+        <div id="message" class="message"></div>
+
+        <!-- 待审核提交 -->
+        <div id="submissionsPanel" class="content-panel active">
+            <h3>待审核提交</h3>
+            <div style="margin-bottom: 15px;">
+                <button class="btn btn-secondary" onclick="loadSubmissions('pending')">待审核</button>
+                <button class="btn btn-secondary" onclick="loadSubmissions('approved')">已批准</button>
+                <button class="btn btn-secondary" onclick="loadSubmissions('rejected')">已拒绝</button>
+                <button class="btn btn-secondary" onclick="loadSubmissions('all')">全部</button>
+            </div>
+            <div id="submissionsList"></div>
+        </div>
+
+        <!-- 添加网站 -->
+        <div id="addSitePanel" class="content-panel">
+            <h3>添加新网站</h3>
+            <form id="addSiteForm">
+                <div class="form-group">
+                    <label>网站名称 <span style="color: red;">*</span></label>
+                    <input type="text" id="addSiteName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>网站地址 <span style="color: red;">*</span></label>
+                    <input type="url" id="addSiteUrl" class="form-control" placeholder="https://example.com" required>
+                </div>
+                <div class="form-group">
+                    <label>网站分类 <span style="color: red;">*</span></label>
+                    <select id="addSiteCategory" class="form-control" required>
+                        <option value="">请选择分类</option>
+                        <option value="常用工具">常用工具</option>
+                        <option value="科研办公">科研办公</option>
+                        <option value="开发设计">开发设计</option>
+                        <option value="效率办公">效率办公</option>
+                        <option value="社交媒体">社交媒体</option>
+                        <option value="资源下载">资源下载</option>
+                        <option value="生活服务">生活服务</option>
+                        <option value="学习教育">学习教育</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>网站描述 <span style="color: red;">*</span></label>
+                    <textarea id="addSiteDescription" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>关键词</label>
+                    <input type="text" id="addSiteKeywords" class="form-control" placeholder="用逗号分隔">
+                </div>
+                <div class="form-group">
+                    <label>网站 Logo 路径</label>
+                    <input type="text" id="addSiteLogoPath" class="form-control" 
+                           placeholder="例如：assets/images/logos/example.jpg（选填，留空将自动生成）">
+                    <small class="text-muted">如果不填写，系统将根据网站域名自动生成 Logo 路径</small>
+                </div>
+                <button type="submit" class="btn btn-primary">添加网站</button>
+            </form>
+        </div>
+
+        <!-- 网站列表 -->
+        <div id="sitesPanel" class="content-panel">
+            <h3>网站列表</h3>
+            <div id="sitesList"></div>
+        </div>
+    </div>
+
+    <script src="./assets/js/jquery.min-3.2.1.js"></script>
+    <script>
+        let authToken = localStorage.getItem('admin_token');
+        // API 配置：如果 Worker 使用独立域名，请修改为完整 URL，例如：
+        // const API_BASE = 'https://nav-api.your-subdomain.workers.dev/api';
+        const API_BASE = 'https://bigworldxld.dpdns.org/api'; // 相对路径，适用于 Pages + Workers 同一域名的情况
+
+        // 检查登录状态
+        if (authToken) {
+            showAdminPage();
+        }
+
+        // 登录表单提交
+        $('#loginForm').on('submit', async function(e) {
+            e.preventDefault();
+            const username = $('#username').val();
+            const password = $('#password').val();
+
+            try {
+                const response = await fetch(`${API_BASE}/admin/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password }),
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    authToken = data.token;
+                    localStorage.setItem('admin_token', authToken);
+                    showMessage('登录成功', 'success');
+                    setTimeout(() => {
+                        showAdminPage();
+                        loadSubmissions('pending');
+                    }, 500);
+                } else {
+                    showMessage(data.message || '登录失败', 'error', '#loginMessage');
+                }
+            } catch (error) {
+                showMessage('网络错误，请稍后重试', 'error', '#loginMessage');
+            }
+        });
+
+        // 显示管理页面
+        function showAdminPage() {
+            $('#loginPage').hide();
+            $('#adminPage').show();
+        }
+
+        // 退出登录
+        function logout() {
+            localStorage.removeItem('admin_token');
+            authToken = null;
+            $('#adminPage').hide();
+            $('#loginPage').show();
+            $('#loginForm')[0].reset();
+        }
+
+        // 切换标签页
+        function switchTab(tab) {
+            $('.tab-btn').removeClass('active');
+            $('.content-panel').removeClass('active');
+            
+            $(`.tab-btn:contains(${tab === 'submissions' ? '待审核提交' : tab === 'addSite' ? '添加网站' : '网站列表'})`).addClass('active');
+            $(`#${tab}Panel`).addClass('active');
+        }
+
+        // 显示消息
+        function showMessage(message, type, selector = '#message') {
+            const $msg = $(selector);
+            $msg.removeClass('success error').addClass(type).text(message);
+            setTimeout(() => {
+                $msg.removeClass('success error').text('');
+            }, 3000);
+        }
+
+        // 加载提交列表
+        async function loadSubmissions(status = 'pending') {
+            if (!authToken) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/admin/submissions?status=${status}`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                    },
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    displaySubmissions(data.submissions || []);
+                } else {
+                    if (response.status === 401) {
+                        logout();
+                        showMessage('登录已过期，请重新登录', 'error', '#loginMessage');
+                    } else {
+                        showMessage(data.message || '加载失败', 'error');
+                    }
+                }
+            } catch (error) {
+                showMessage('网络错误', 'error');
+            }
+        }
+
+        // 显示提交列表
+        function displaySubmissions(submissions) {
+            if (submissions.length === 0) {
+                $('#submissionsList').html('<p>暂无数据</p>');
+                return;
+            }
+
+            let html = '<table><thead><tr><th>网站名称</th><th>网址</th><th>分类</th><th>描述</th><th>邮箱</th><th>提交时间</th><th>状态</th><th>操作</th></tr></thead><tbody>';
+
+            submissions.forEach(sub => {
+                const statusClass = `status-${sub.status}`;
+                const statusText = sub.status === 'pending' ? '待审核' : sub.status === 'approved' ? '已批准' : '已拒绝';
+                
+                html += `<tr>
+                    <td>${sub.siteName}</td>
+                    <td><a href="${sub.siteUrl}" target="_blank">${sub.siteUrl}</a></td>
+                    <td>${sub.category}</td>
+                    <td>${sub.description}</td>
+                    <td>${sub.email}</td>
+                    <td>${new Date(sub.submitTime).toLocaleString('zh-CN')}</td>
+                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                    <td class="action-buttons">`;
+
+                if (sub.status === 'pending') {
+                    html += `<button class="btn btn-success" onclick="reviewSubmission('${sub.id}', 'approve')">批准</button>
+                             <button class="btn btn-danger" onclick="reviewSubmission('${sub.id}', 'reject')">拒绝</button>`;
+                } else {
+                    html += '-';
+                }
+
+                html += `</td></tr>`;
+            });
+
+            html += '</tbody></table>';
+            $('#submissionsList').html(html);
+        }
+
+        // 审核提交
+        async function reviewSubmission(submissionId, action) {
+            if (!authToken) return;
+
+            if (!confirm(action === 'approve' ? '确定批准该提交吗？' : '确定拒绝该提交吗？')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/admin/review`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`,
+                    },
+                    body: JSON.stringify({ submissionId, action }),
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showMessage(data.message || '操作成功', 'success');
+                    loadSubmissions('pending');
+                } else {
+                    if (response.status === 401) {
+                        logout();
+                        showMessage('登录已过期，请重新登录', 'error', '#loginMessage');
+                    } else {
+                        showMessage(data.message || '操作失败', 'error');
+                    }
+                }
+            } catch (error) {
+                showMessage('网络错误', 'error');
+            }
+        }
+
+        // 添加网站表单提交
+        $('#addSiteForm').on('submit', async function(e) {
+            e.preventDefault();
+            if (!authToken) {
+                showMessage('请先登录', 'error');
+                return;
+            }
+
+            const formData = {
+                siteName: $('#addSiteName').val().trim(),
+                siteUrl: $('#addSiteUrl').val().trim(),
+                category: $('#addSiteCategory').val(),
+                description: $('#addSiteDescription').val().trim(),
+                keywords: $('#addSiteKeywords').val().trim(),
+                logoPath: $('#addSiteLogoPath').val().trim(), // 添加 logo 路径
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/admin/add-site`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`,
+                    },
+                    body: JSON.stringify(formData),
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showMessage('网站添加成功', 'success');
+                    $('#addSiteForm')[0].reset();
+                    loadSites();
+                } else {
+                    if (response.status === 401) {
+                        logout();
+                        showMessage('登录已过期，请重新登录', 'error', '#loginMessage');
+                    } else {
+                        showMessage(data.message || '添加失败', 'error');
+                    }
+                }
+            } catch (error) {
+                showMessage('网络错误', 'error');
+            }
+        });
+
+        // 加载网站列表
+        async function loadSites() {
+            if (!authToken) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/admin/sites`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                    },
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    displaySites(data.sites || []);
+                } else {
+                    if (response.status === 401) {
+                        logout();
+                        showMessage('登录已过期，请重新登录', 'error', '#loginMessage');
+                    } else {
+                        showMessage(data.message || '加载失败', 'error');
+                    }
+                }
+            } catch (error) {
+                showMessage('网络错误', 'error');
+            }
+        }
+
+        // 显示网站列表
+        function displaySites(sites) {
+            if (sites.length === 0) {
+                $('#sitesList').html('<p>暂无网站</p>');
+                return;
+            }
+
+            let html = '<table><thead><tr><th>网站名称</th><th>网址</th><th>分类</th><th>描述</th><th>添加时间</th><th>来源</th></tr></thead><tbody>';
+
+            sites.forEach(site => {
+                html += `<tr>
+                    <td>${site.siteName}</td>
+                    <td><a href="${site.siteUrl}" target="_blank">${site.siteUrl}</a></td>
+                    <td>${site.category}</td>
+                    <td>${site.description}</td>
+                    <td>${new Date(site.addedAt).toLocaleString('zh-CN')}</td>
+                    <td>${site.addedBy === 'admin' ? '管理员添加' : '用户提交'}</td>
+                </tr>`;
+            });
+
+            html += '</tbody></table>';
+            $('#sitesList').html(html);
+        }
+
+        // 切换到网站列表标签时加载数据
+        $('.tab-btn').on('click', function() {
+            if ($(this).text().includes('网站列表')) {
+                loadSites();
+            }
+        });
+    </script>
+</body>
+</html>
+
