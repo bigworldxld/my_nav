@@ -1,0 +1,33 @@
+name = "mynav"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+# KV Namespaces 配置
+# 需要在 Cloudflare Dashboard 中创建 KV Namespace，然后获取 ID 填入
+
+# 存储用户提交的表单数据
+[[kv_namespaces]]
+binding = "SUBMISSIONS_KV"
+id = "b27303389e594940b6dffc0b5cccc27a"  # 替换为实际的 KV Namespace ID
+
+# 存储已审核通过的网站列表
+[[kv_namespaces]]
+binding = "SITES_KV"
+id = "d5e25dd2849e4f67a11b18b991b30de3"  # 替换为实际的 KV Namespace ID
+
+# 存储管理员 token 和配置
+[[kv_namespaces]]
+binding = "ADMIN_KV"
+id = "dd2f1889adf04124bf96b8a28757d2f3"  # 替换为实际的 KV Namespace ID
+
+# 环境变量（可选，用于配置管理员账号）
+# 可以在 Cloudflare Dashboard 的 Workers > Settings > Variables 中设置
+# 或者在本地开发时使用 wrangler secret put ADMIN_USERNAME
+# wrangler secret put ADMIN_PASSWORD
+
+# [vars]
+# ADMIN_USERNAME = "admin"
+# ADMIN_PASSWORD = "123"
+
+
+
