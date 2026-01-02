@@ -246,7 +246,7 @@
                         <ul class="navbar-nav site-menu" style="margin-right: 16px;">
 
 			<li >
-				<a href="./">
+				<a href="https://blog.bigworldxld.dpdns.org/">
                                     <i class="fa fa-home fa-lg mr-2"></i>
                                     <span>首页</span>
                                 </a>
@@ -1421,7 +1421,6 @@
             <br />
 
 
-
             <div class="d-flex flex-fill">
                 <h4 class="text-gray text-lg mb-4">
                     <i class="site-tag iconfont icon-tag icon-lg mr-1" id="e0aade1cd567f730e498e248bbd6acdf"></i>
@@ -1567,12 +1566,6 @@
 
             </div>
             <br />
-
-
-
-
-
-
 
             <div class="d-flex flex-fill">
                 <h4 class="text-gray text-lg mb-4">
@@ -6179,15 +6172,26 @@ function switchNightMode(){
     // 分类名称到 HTML ID 的映射（根据实际页面中的分类 ID 填写）
     const categoryIdMap = {
         '常用工具': '3e90c5117dc0fe9d71410e448d766e52',
-        '科研办公': '89a839e0a347c0be73793d01e52c31ad',
-        '开发设计': 'a4d417d7850fde0cd00e4af576621a63',
-        // '效率办公': 'e0aade1cd567f730e498e248bbd6acdf',
-        // '社交媒体': 'e15122403d5aca361a6b63ddea292464',
-        '悠闲娱乐': 'e15122403d5aca361a6b63ddea292464',
-        '资源下载': '5e6e1089ffbc5d7819c0d0f1f7b31ebc',
-        // '生活服务': '7866a35b09d466b9cf0295af54d30d53',
-        '学习教育': '779477bcccdd4ecb1d852c8d4a67caca',
-        // '其他': 'ff65f7f9721757bf11b0b0c95f1b9446'
+        '科研办公-生物信息': '89a839e0a347c0be73793d01e52c31ad',
+        '科研办公-云服务器': 'acd617ea241c9daf2f251963bc03c6e3',
+        '科研办公-办公学习': 'e0aade1cd567f730e498e248bbd6acdf',
+        '开发设计-图形创意': '4fbc8ba07df90bae306d8e3b83fc5a21',
+        '开发设计-界面设计': '542c016a714d85715d206c8892fba01f',
+        '开发设计-在线配色': '31e51a60697ff3fb1d1c4934cce67921',
+        '开发设计-在线工具': '9c2232288caaa8ec40948cef6a786ac2',
+        '开发设计-谷歌插件': '13a0e1cc22ccc31b31242a6046230729',
+        '悠闲娱乐-影音视频': 'a4d417d7850fde0cd00e4af576621a63',
+        '悠闲娱乐-游戏竞技': 'e15122403d5aca361a6b63ddea292464',
+        '资源下载-网盘资源': '5e6e1089ffbc5d7819c0d0f1f7b31ebc',
+        '资源下载-图标素材': '7866a35b09d466b9cf0295af54d30d53',
+        '资源下载-图标设计': '779477bcccdd4ecb1d852c8d4a67caca',
+        '资源下载-平面素材': 'ff65f7f9721757bf11b0b0c95f1b9446',
+        '资源下载-字体资源': '722d3693fc0b9344bb46ee220beac1b6',
+        '资源下载-PPT资源': '113a0a745b4169af0f7646269c12ae66',
+        '学习教育-咨询图书': '19cb9b648dba4efc58a205ea413b6b5d',
+        '学习教育-博客论坛': 'c7a9a750a4a636f0bb3e982b5ea9141c',
+        '学习教育-设计规范': '33d3098041927a26a98ed4c6822c9687',
+        '学习教育-视频教程': 'aec25b122d7aceb3dd3b64cf71858ed2',
     };
 
     // API 地址（根据实际部署情况修改）
@@ -6195,18 +6199,30 @@ function switchNightMode(){
 
     // 获取网站 Logo 路径
     function getLogoPath(site) {
-        // 优先使用保存的 logoPath
+        // 1. 优先使用保存的 logoPath（如果填写了图片链接）
         if (site.logoPath && site.logoPath.trim()) {
             return site.logoPath.trim();
         }
         
-        // 如果没有保存的 logoPath，尝试从 URL 提取域名作为 logo 文件名
+        // 2. 如果没有保存的 logoPath，尝试获取网站的 favicon
         try {
-            const domain = new URL(site.siteUrl).hostname.replace('www.', '');
-            const logoPath = `assets/images/logos/${encodeURIComponent(domain)}.jpg`;
-            return logoPath;
+            const url = new URL(site.siteUrl);
+            const domain = url.hostname.replace('www.', '');
+            
+            // 使用 Google 的 favicon 服务（更可靠，支持大部分网站）
+            // 这个服务会自动从网站获取 favicon，如果网站没有则返回默认图标
+            const googleIconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+            return googleIconUrl;
         } catch {
+            try{
+                const bingIconUrl = `https://icon.horse/icon/${domain}`;
+                return bingIconUrl
+
+            }catch{
+            // 3. 如果解析 URL 失败，返回默认图片
             return 'assets/images/logos/default.webp';
+            }
+
         }
     }
 
