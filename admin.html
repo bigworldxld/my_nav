@@ -576,13 +576,53 @@
                     <td>${site.description}</td>
                     <td>${new Date(site.addedAt).toLocaleString('zh-CN')}</td>
                     <td>${site.addedBy === 'admin' ? '管理员添加' : '用户提交'}</td>
+                    <td class="action-buttons">
+                        <button class="btn btn-danger" onclick="deleteSite('${site.id}')">删除</button>
+                    </td>
                 </tr>`;
             });
 
             html += '</tbody></table>';
             $('#sitesList').html(html);
         }
+        // 删除网站
+        async function deleteSite(siteId) {
+            if (!authToken) {
+                showMessage('请先登录', 'error');
+                return;
+            }
 
+            if (!confirm('确定要删除这个网站吗？此操作不可恢复！')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/admin/delete-site`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`,
+                    },
+                    body: JSON.stringify({ siteId }),
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showMessage('网站删除成功', 'success');
+                    loadSites(); // 重新加载列表
+                } else {
+                    if (response.status === 401) {
+                        logout();
+                        showMessage('登录已过期，请重新登录', 'error', '#loginMessage');
+                    } else {
+                        showMessage(data.message || '删除失败', 'error');
+                    }
+                }
+            } catch (error) {
+                showMessage('网络错误', 'error');
+            }
+        }
         // 切换到网站列表标签时加载数据
         $('.tab-btn').on('click', function() {
             if ($(this).text().includes('网站列表')) {

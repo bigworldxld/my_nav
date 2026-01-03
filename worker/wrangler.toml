@@ -2,6 +2,12 @@ name = "mynav"
 main = "src/index.js"
 compatibility_date = "2024-01-01"
 
+# 路由配置（自定义域名）
+[[routes]]
+pattern = "mynav.dpdns.org"
+zone_name = "mynav.dpdns.org"
+custom_domain = true
+
 # KV Namespaces 配置
 # 需要在 Cloudflare Dashboard 中创建 KV Namespace，然后获取 ID 填入
 
@@ -26,8 +32,8 @@ id = "dd2f1889adf04124bf96b8a28757d2f3"  # 替换为实际的 KV Namespace ID
 # wrangler secret put ADMIN_PASSWORD
 
 # [vars]
-# ADMIN_USERNAME = "admin"
-# ADMIN_PASSWORD = "123"
+# ADMIN_USERNAME = "XXX"
+# ADMIN_PASSWORD = "XXX"
 
 
 

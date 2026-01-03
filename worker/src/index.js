@@ -384,7 +384,79 @@ async function handleGetSites(request, env) {
     return errorResponse('获取网站列表失败', 500);
   }
 }
+// 删除网站（Admin）
+async function handleDeleteSite(request, env) {
+  const isAuthenticated = await verifyAdminToken(request, env);
+  if (!isAuthenticated) {
+    return errorResponse('未授权访问', 401);
+  }
 
+  try {
+    const { siteId } = await request.json();
+
+    if (!siteId) {
+      return errorResponse('网站ID不能为空');
+    }
+
+    // 获取网站数据
+    const siteData = await env.SITES_KV.get(siteId, 'json');
+    if (!siteData) {
+      return errorResponse('网站不存在');
+    }
+
+    // 从网站列表中移除
+    const sitesListKey = 'sites_list';
+    const sitesList = await env.SITES_KV.get(sitesListKey, 'json') || [];
+    const newSitesList = sitesList.filter(id => id !== siteId);
+    await env.SITES_KV.put(sitesListKey, JSON.stringify(newSitesList));
+
+    // 从分类列表中移除
+    const categoryKey = `category_${siteData.category}`;
+    const categoryList = await env.SITES_KV.get(categoryKey, 'json') || [];
+    const newCategoryList = categoryList.filter(id => id !== siteId);
+    await env.SITES_KV.put(categoryKey, JSON.stringify(newCategoryList));
+
+    // 删除网站数据
+    await env.SITES_KV.delete(siteId);
+    // 如果网站是通过用户提交审核添加的，同时删除 SUBMISSIONS_KV 中的相关提交记录
+    if (siteData.addedBy === 'user_submission') {
+      // 通过网站URL查找并删除相关的提交记录
+      const pendingList = await env.SUBMISSIONS_KV.get('pending_submissions', 'json') || [];
+      const approvedList = await env.SUBMISSIONS_KV.get('approved_submissions', 'json') || [];
+      const rejectedList = await env.SUBMISSIONS_KV.get('rejected_submissions', 'json') || [];
+      
+      // 合并所有提交ID列表
+      const allSubmissionIds = [...pendingList, ...approvedList, ...rejectedList];
+      
+      // 查找匹配的提交记录（通过网站URL匹配）
+      for (const submissionId of allSubmissionIds) {
+        const submissionData = await env.SUBMISSIONS_KV.get(submissionId, 'json');
+        if (submissionData && submissionData.siteUrl === siteData.siteUrl) {
+          // 从对应的列表中移除
+          if (pendingList.includes(submissionId)) {
+            const newPendingList = pendingList.filter(id => id !== submissionId);
+            await env.SUBMISSIONS_KV.put('pending_submissions', JSON.stringify(newPendingList));
+          }
+          if (approvedList.includes(submissionId)) {
+            const newApprovedList = approvedList.filter(id => id !== submissionId);
+            await env.SUBMISSIONS_KV.put('approved_submissions', JSON.stringify(newApprovedList));
+          }
+          if (rejectedList.includes(submissionId)) {
+            const newRejectedList = rejectedList.filter(id => id !== submissionId);
+            await env.SUBMISSIONS_KV.put('rejected_submissions', JSON.stringify(newRejectedList));
+          }
+          
+          // 删除提交记录数据
+          await env.SUBMISSIONS_KV.delete(submissionId);
+          break; // 找到匹配的记录后退出循环
+        }
+      }
+    }
+    return successResponse({}, '网站删除成功');
+  } catch (error) {
+    return errorResponse('删除网站失败', 500);
+  }
+}
 // 获取公开的网站列表（按分类组织，供前端使用）
 async function handleGetPublicSites(request, env) {
   try {
@@ -457,7 +529,10 @@ export default {
         if (path === '/api/admin/sites' && request.method === 'GET') {
           return handleGetSites(request, env);
         }
-
+         // 删除网站 API
+         if (path === '/api/admin/delete-site' && request.method === 'POST') {
+          return handleDeleteSite(request, env);
+        }
         // 公开的网站列表 API（供前端使用）
         if (path === '/api/sites' && request.method === 'GET') {
           return handleGetPublicSites(request, env);
